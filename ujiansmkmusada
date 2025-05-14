@@ -1,0 +1,179 @@
+/smk-ujian
+  /index.html
+  /style.css
+  /script.js
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian SMK Muhammadiyah Sadang</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Ujian SMK Muhammadiyah Sadang</h1>
+        <p>Waktu ujian: <span id="timer">15:00</span></p>
+    </header>
+
+    <div id="quiz-container">
+        <div id="question-container">
+            <!-- Soal akan ditampilkan di sini -->
+        </div>
+
+        <div id="answer-container">
+            <!-- Jawaban soal akan ditampilkan di sini -->
+        </div>
+
+        <button id="submit-btn">Selesai Ujian</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian SMK Muhammadiyah Sadang</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Ujian SMK Muhammadiyah Sadang</h1>
+        <p>Waktu ujian: <span id="timer">15:00</span></p>
+    </header>
+
+    <div id="quiz-container">
+        <div id="question-container">
+            <!-- Soal akan ditampilkan di sini -->
+        </div>
+
+        <div id="answer-container">
+            <!-- Jawaban soal akan ditampilkan di sini -->
+        </div>
+
+        <button id="submit-btn">Selesai Ujian</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+}
+
+#quiz-container {
+    margin-top: 30px;
+    padding: 20px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+let timer;
+let timeLeft = 15 * 60; // 15 menit dalam detik
+let currentQuestion = 0;
+
+const questions = [
+    {
+        question: "Siapa Presiden Indonesia?",
+        options: ["Joko Widodo", "Bacharuddin Jusuf Habibie", "Soeharto", "Megawati Soekarnoputri"],
+        correct: "Joko Widodo",
+        type: "multiple"
+    },
+    {
+        question: "Jelaskan apa itu Pancasila?",
+        options: [],
+        correct: "Pancasila adalah dasar negara Indonesia yang terdiri dari lima sila.",
+        type: "essay"
+    }
+];
+
+function startTimer() {
+    timer = setInterval(function () {
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            alert("Waktu habis!");
+        } else {
+            timeLeft--;
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById("timer").textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        }
+    }, 1000);
+}
+
+function displayQuestion() {
+    const question = questions[currentQuestion];
+    const questionContainer = document.getElementById("question-container");
+    const answerContainer = document.getElementById("answer-container");
+
+    questionContainer.innerHTML = `<h2>${question.question}</h2>`;
+
+    if (question.type === "multiple") {
+        let optionsHTML = "";
+        question.options.forEach(option => {
+            optionsHTML += `
+                <input type="radio" name="answer" value="${option}" id="option-${option}">
+                <label for="option-${option}">${option}</label><br>
+            `;
+        });
+        answerContainer.innerHTML = optionsHTML;
+    } else if (question.type === "essay") {
+        answerContainer.innerHTML = `
+            <textarea id="essay-answer" rows="4" cols="50"></textarea>
+        `;
+    }
+}
+
+function submitAnswer() {
+    const question = questions[currentQuestion];
+    let userAnswer;
+
+    if (question.type === "multiple") {
+        const selectedOption = document.querySelector('input[name="answer"]:checked');
+        if (selectedOption) {
+            userAnswer = selectedOption.value;
+        }
+    } else if (question.type === "essay") {
+        userAnswer = document.getElementById("essay-answer").value;
+    }
+
+    if (userAnswer === question.correct) {
+        alert("Jawaban Benar!");
+    } else {
+        alert("Jawaban Salah!");
+    }
+
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+        displayQuestion();
+    } else {
+        alert("Ujian selesai!");
+    }
+}
+
+document.getElementById("submit-btn").addEventListener("click", submitAnswer);
+
+startTimer();
+displayQuestion();
